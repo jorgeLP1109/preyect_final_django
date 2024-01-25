@@ -1,0 +1,67 @@
+/* En static/css/styles.css */
+body {
+  font-family: Arial, sans-serif;
+  background-image: url('% static "background/SL-1.jpg" %'); /* Reemplaza con la ruta correcta a tu imagen de fondo */
+  background-size: cover; /* Ajusta el tamaño de la imagen para cubrir todo el fondo */
+  background-position: center; /* Ajusta la posición de la imagen */
+  background-color: rgb(180, 190, 190);
+  color: #000; /* Cambia el color del texto según tus preferencias */
+}
+
+.product-list {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+/* Resto de tu archivo CSS... */
+.product-item {
+  width: 100%;
+  max-width: 300px;
+  margin: 10px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  box-sizing: border-box;
+}
+
+.product-item img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+  object-fit: cover;
+  
+  
+}
+
+.title{
+  color:rgb(199, 187, 23);
+  background-color: rgb(14, 13, 13);
+}
+
+.animat{
+  body,html{margin:0;padding:0;height:100%;}
+body{
+  background:url('https://farm9.staticflickr.com/8760/17195790401_ceeeafcddb_o.jpg');
+  background-size:cover;
+  font-family: 'Cabin Condensed', sans-serif;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+}
+svg{font-weight:bold;max-width:600px;height:auto;}
+
+}
+
+/* En tu archivo styles.css */
+.image-slider {
+  max-width: 500px; /* Ajusta el ancho máximo según tus preferencias */
+  margin: 0 auto; /* Centra el slider en la página */
+  overflow: hidden; /* Oculta las partes de la imagen que excedan el tamaño del contenedor */
+}
+
+.image-slider img {
+  width: 100%; /* Asegura que la imagen ocupe todo el ancho del contenedor */
+  height: auto; /* Mantiene la proporción original de la imagen */
+  cursor: pointer; /* Muestra un cursor de clic en la imagen */
+}

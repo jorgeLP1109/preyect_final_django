@@ -1,0 +1,33 @@
+<!-- En templates/product_edit.html -->
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tu Tienda</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    
+</head>
+<body>
+  <div id="navbar">
+      <a href="{% url 'product_list' %}">Productos</a>
+      <a href="{% url 'create_product' %}">Agregar Producto</a>
+      
+      
+
+      <a href="{% url 'logout' %}">Cerrar Sesión</a>      
+        
+        
+           
+        
+  </div>
+
+{% block content %}
+  <h2>Editar Producto - {{ product.name }}</h2>
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Guardar Cambios</button>
+  </form>
+{% endblock %}

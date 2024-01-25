@@ -1,0 +1,27 @@
+# .gitignore
+
+# Entornos virtuales
+venv/
+env/
+
+# Archivos generados por el sistema operativo
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.DS_Store
+
+# Archivos de configuración
+*.sqlite3
+*.pyc
+*.pyo
+
+# Archivos de configuración de IDEs
+.vscode/
+.idea/
+
+# Archivos de registro y caché
+log/
+tmp/
+
+ventas_web/final_django/

@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2>Carrito de Compras</h2>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Descripción</th>
+        <th>Precio</th>
+        <th>Cantidad</th>
+        <th>Total</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for product in cart.products.all %}
+        <tr>
+        <td>{{ product.name }}</td>
+        <td>{{ product.description }}</td>
+        <td>${{ product.price }}</td>
+        <td>
+          <form method="POST" action="{% url 'update_cart' product.id %}">
+        	{% csrf_token %}
+        	<input type="number" name="quantity" value="{{ product.cart_set.first.quantity }}">
+        	<button type="submit">Actualizar</button>
+          </form>
+        </td>
+        <td>${{ total_price = product.price * product.cartitem_set.first().quantity }}</td>
+       
+        <td>${{ total_price }}</td>
+
+        <td>
+          <form method="POST" action="{% url 'remove_from_cart' product.id %}">
+        	{% csrf_token %}
+            <button type="submit">Eliminar</button>
+          </form>
+        </td>
+    </tr>
+        
+      {% endfor %}
+    </tbody>
+  </table>
+  <div>
+    <a href="{% url 'checkout' %}">Comprar</a>
+  </div>
+{% endblock %}

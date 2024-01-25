@@ -1,0 +1,7 @@
+<!-- En templates/registration/logged_out.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2>¡Has cerrado sesión exitosamente!</h2>
+  <p>Gracias por visitarnos. Puedes volver a iniciar sesión <a href="{% url 'login' %}">aquí</a>.</p>
+{% endblock %}

@@ -1,0 +1,25 @@
+<!-- En templates/registration/login.html -->
+{% load static %}
+<div id="navbar">
+    <a href="{% url 'home' %}">Inicio</a>
+    
+    
+    <a href="{% url 'register' %}">Registro</a>
+          
+</div>
+</head>
+
+    <meta charset="UTF-8">
+    <title>Tu Tienda</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    
+    
+</head>
+{% block content %}
+<h2>Iniciar Sesión</h2>
+<form method="post" action="{% url 'login' %}">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Iniciar Sesión</button>
+</form>
+{% endblock %}

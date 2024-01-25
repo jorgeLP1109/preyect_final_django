@@ -1,0 +1,47 @@
+<!-- En templates/product_list.html -->
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tu Tienda</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    
+</head>
+<body>
+  <div id="navbar">
+      <a href="{% url 'product_list' %}">Productos</a>
+      <a href="{% url 'create_product' %}">Agregar Producto</a>
+      
+      {% if user.is_authenticated and user.is_staff %}
+            
+              
+                <a href="{% if product.id %}{% url 'edit_product' product.id %}{% endif %}">Editar Producto</a>
+
+            {% endif %}
+
+      <a href="{% url 'logout' %}">Cerrar Sesión</a>      
+        
+        
+           
+        
+  </div>
+</body>      
+
+    {% block content %}
+      <h2>Lista de Productos</h2>
+        <div class="product-list">
+          {% for product in products %}
+            <div class="product-item">
+              <h3>{{ product.name }}</h3>
+                <p>{{ product.description }}</p>
+                <p>Precio: ${{ product.price }}</p>
+          {% if product.image %}
+            <img src="{{ product.image.url }}" alt="{{ product.name }}">
+          {% endif %}
+        <!-- Agrega más detalles según tus necesidades -->
+      </div>
+    {% endfor %}
+  </div>
+{% endblock %}

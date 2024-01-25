@@ -1,0 +1,39 @@
+<!-- En templates/product_create.html -->
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tu Tienda</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    
+</head>
+<body>
+  <div id="navbar">
+      <a href="{% url 'product_list' %}">Productos</a>
+      
+      
+      
+      {% if user.is_authenticated and user.is_staff %}
+            
+                <a href="{% url 'create_product' %}">Agregar Producto</a>
+                
+
+            {% endif %}
+
+      <a href="{% url 'logout' %}">Cerrar Sesión</a>      
+        
+        
+           
+        
+  </div>
+
+{% block content %}
+  <h2>Crear Nuevo Producto</h2>
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Guardar Producto</button>
+  </form>
+{% endblock %}

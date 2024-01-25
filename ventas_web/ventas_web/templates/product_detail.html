@@ -1,0 +1,61 @@
+<!-- En product_detail.html -->
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tu Tienda</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            var currentIndex = 0;
+            var images = [
+                "{{ product.image.url }}",
+                {% if product.image_2 %}"{{ product.image_2.url }}",{% endif %}
+                {% if product.image_3 %}"{{ product.image_3.url }}",{% endif %}
+                {% if product.image_4 %}"{{ product.image_4.url }}",{% endif %}
+                {% if product.image_5 %}"{{ product.image_5.url }}",{% endif %}
+            ];
+
+            function showImage(index) {
+                $(".image-slider img").attr("src", images[index]);
+            }
+
+            function nextImage() {
+                currentIndex = (currentIndex + 1) % images.length;
+                showImage(currentIndex);
+            }
+
+            function prevImage() {
+                currentIndex = (currentIndex - 1 + images.length) % images.length;
+                showImage(currentIndex);
+            }
+
+            $(".image-slider img").on("click", function () {
+                nextImage();
+            });
+
+            setInterval(nextImage, 5000);  // Cambia automáticamente cada 5 segundos
+        });
+    </script>
+</head>
+<body>
+  <div id="navbar">
+      <a href="{% url 'product_list' %}">Productos</a>
+      <a href="{% url 'create_product' %}">Agregar Producto</a>
+      <a href="{% url 'logout' %}">Cerrar Sesión</a>
+  </div>
+
+  {% block content %}
+    <h2>Detalle del Producto - {{ product.name }}</h2>
+    <div class="product-details">
+      <p>{{ product.description }}</p>
+      <p>Precio: ${{ product.price }}</p>
+      <div class="image-slider">
+        <img src="{{ product.image.url }}" alt="{{ product.name }}">
+      </div>
+    </div>
+  {% endblock %}
+</body>
+</html>
