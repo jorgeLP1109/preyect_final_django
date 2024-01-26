@@ -137,3 +137,14 @@ ROOT_URLCONF = 'ventas_web.urls'
 LOGIN_REDIRECT_URL = '/product_list/' #mosca con esta para el login si no carga
 LOGOUT_REDIRECT_URL = 'home'
 
+#API de pago $$$$$$$$$$
+
+
+INSTAPAGO_API_KEY = 'b980b67c7f469c1af92a9b015c5c1020'
+#INSTAPAGO_API_URL = 'https://api.instapago.com/'
+
+INSTAPAGO_KEY = 'ED80FCD8-E712-4753-B307-64FE52B8B3D4'
+INSTAPAGO_PUBLIC_KEY = 'b980b67c7f469c1af92a9b015c5c1020'
+INSTAPAGO_API_URL = 'https://api.instapago.com/payment'
+INSTAPAGO_KEY_ID = 'ED80FCD8-E712-4753-B307-64FE52B8B3D4'
+

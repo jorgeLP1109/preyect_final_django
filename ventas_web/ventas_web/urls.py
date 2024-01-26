@@ -21,6 +21,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.auth.views import LoginView
 from .views import add_to_cart, update_cart, remove_from_cart, cart_view, checkout
+from .views import payment_view
 
 
 
@@ -37,6 +38,7 @@ urlpatterns = [
     path('remove_from_cart/<int:product_id>/', remove_from_cart, name='remove_from_cart'),
     path('cart/', cart_view, name='cart'),
     path('checkout/', checkout, name='checkout'),
+    path('realizar-pago/', payment_view, name='payment_view'),
     
     
     #path('', product_list, name='product_list'),

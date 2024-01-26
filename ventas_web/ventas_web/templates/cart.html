@@ -39,6 +39,9 @@
     </tbody>
   </table>
   <div>
-    <a href="{% url 'checkout' %}">Comprar</a>
+    <form method="post" action="{% url 'checkout' %}">
+      {% csrf_token %}
+      <button type="submit">Comprar</button>
+  </form>
   </div>
 {% endblock %}

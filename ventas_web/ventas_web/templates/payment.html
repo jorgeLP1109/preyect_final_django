@@ -1,0 +1,12 @@
+<!-- payment.html -->
+
+
+
+{% block content %}
+  <h2>Realizar Pago</h2>
+  <form method="post" action="{% url 'payment_view' %}">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Pagar</button>
+  </form>
+{% endblock %}

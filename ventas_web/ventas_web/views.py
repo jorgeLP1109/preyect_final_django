@@ -7,7 +7,9 @@ from .models import Product, Cart, CartItem
 from .forms import ProductForm
 from django.contrib.auth.views import LoginView, LogoutView
 from django.urls import reverse_lazy
-
+from django.conf import settings
+from django.http import JsonResponse
+import requests
 
 @login_required(login_url='/login/')  # Redirects unauthenticated users to the login page
 def product_list(request):
@@ -61,12 +63,26 @@ def cart_view(request):
     return render(request, 'cart.html', {'cart': user_cart})
 
 def checkout(request):
-    # Agrega aquí la lógica de procesamiento de pago según la API que vayas a utilizar
-    # Puedes redirigir a una página de confirmación o manejar otros pasos del proceso de compra
-    # Por ahora, simplemente limpiamos el carrito y redirigimos a la página de inicio
-    user_cart, created = Cart.objects.get_or_create(user=request.user)
-    user_cart.products.clear()
-    return redirect('home')
+    if request.method == 'POST':
+        # Lógica de procesamiento de pago con Instapago
+        user_cart, created = Cart.objects.get_or_create(user=request.user)
+        total_amount = user_cart.calculate_total()
+
+        payload = {
+            'KeyId': settings.INSTAPAGO_KEY_ID,
+            'PublicKeyId': settings.INSTAPAGO_PUBLIC_KEY,
+            'Amount': total_amount,
+            # Agrega más campos según sea necesario
+        }
+
+        # Resto de la lógica para la API de Instapago
+
+        # Después de procesar el pago, puedes redirigir a una página de éxito
+        return render(request, 'payment_success.html')
+    else:
+        # Maneja el caso de solicitud GET (si es necesario)
+        return HttpResponse("Método no permitido")
+
 def product_detail(request, product_id):
     product = get_object_or_404(Product, id=product_id)
     images = [product.image, product.image_2, product.image_3, product.image_4, product.image_5]
@@ -147,3 +163,35 @@ def otra_vista(request):
 class CustomLoginView(LoginView):
     def get_success_url(self):
         return reverse_lazy('home')
+    
+def payment_view(request):
+    if request.method == 'POST':
+        # Recupera la información del formulario o el objeto del carrito
+        amount = request.POST.get('amount')
+        card_holder = request.POST.get('card_holder')
+        card_number = request.POST.get('card_number')
+        expiration_date = request.POST.get('expiration_date')
+        cvc = request.POST.get('cvc')
+
+        # Construye la solicitud a la API de Instapago
+        payload = {
+            'KeyID': settings.INSTAPAGO_API_KEY,
+            'Amount': amount,
+            'Description': 'Descripción de la compra',
+            'CardHolder': card_holder,
+            'CardNumber': card_number,
+            'ExpirationDate': expiration_date,
+            'CVC': cvc,
+        }
+
+        response = requests.post(settings.INSTAPAGO_API_URL, json=payload)
+
+        # Procesa la respuesta de la API
+        if response.status_code == 200:
+            # Pago exitoso
+            return JsonResponse({'message': 'Pago exitoso'})
+        else:
+            # Pago fallido
+            return JsonResponse({'message': 'Error en el pago'})
+
+    return render(request, 'payment.html')  # Asegúrate de tener un template payment.html    
