@@ -3,7 +3,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login, authenticate
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from .models import Product, Cart
+from .models import Product, Cart, CartItem
 from .forms import ProductForm
 from django.contrib.auth.views import LoginView, LogoutView
 from django.urls import reverse_lazy
@@ -25,12 +25,16 @@ def add_to_cart(request, product_id):
     # Verifica si el producto ya está en el carrito
     if not user_cart.products.filter(id=product.id).exists():
         # Si no está en el carrito, añádelo
-        user_cart.products.add(product)
+        cart_item, created = CartItem.objects.get_or_create(cart=user_cart, product=product)
+    else:
+        # Si ya está en el carrito, incrementa la cantidad
+        cart_item = CartItem.objects.get(cart=user_cart, product=product)
+        cart_item.quantity += 1
+        cart_item.save()
     
-    total_price = product.price * product.cart_set.first.quantity
+    total_price = cart_item.total_price()  # Utiliza el método de la clase CartItem para calcular el total
     
     return render(request, 'cart.html', {'cart': user_cart, 'total_price': total_price})
-
 
 
 def update_cart(request, product_id):
