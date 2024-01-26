@@ -39,8 +39,17 @@
     </tbody>
   </table>
   <div>
-    <form method="post" action="{% url 'checkout' %}">
+    <form method="POST" action="{% url 'checkout' %}">
       {% csrf_token %}
+      <label for="card_number">Número de Tarjeta:</label>
+      <input type="text" id="card_number" name="card_number" required>
+      
+      <label for="expiration_date">Fecha de Expiración:</label>
+      <input type="text" id="expiration_date" name="expiration_date" placeholder="MM/YY" required>
+      
+      <label for="cvv">Código de Seguridad (CVV):</label>
+      <input type="text" id="cvv" name="cvv" required>
+      
       <button type="submit">Comprar</button>
   </form>
   </div>

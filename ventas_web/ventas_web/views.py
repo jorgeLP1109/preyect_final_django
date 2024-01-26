@@ -10,6 +10,8 @@ from django.urls import reverse_lazy
 from django.conf import settings
 from django.http import JsonResponse
 import requests
+from django.http import HttpResponse
+
 
 @login_required(login_url='/login/')  # Redirects unauthenticated users to the login page
 def product_list(request):
@@ -64,24 +66,41 @@ def cart_view(request):
 
 def checkout(request):
     if request.method == 'POST':
-        # Lógica de procesamiento de pago con Instapago
+        # Recupera la información del carrito y el monto total
         user_cart, created = Cart.objects.get_or_create(user=request.user)
         total_amount = user_cart.calculate_total()
 
+        # Recupera la información del formulario de pago
+        card_number = request.POST.get('card_number')
+        expiration_date = request.POST.get('expiration_date')
+        cvv = request.POST.get('cvv')
+
+        # Prepara la solicitud a la API de Instapago
         payload = {
             'KeyId': settings.INSTAPAGO_KEY_ID,
             'PublicKeyId': settings.INSTAPAGO_PUBLIC_KEY,
             'Amount': total_amount,
+            'CardHolder': request.user.get_full_name(),  # Nombre completo del titular de la tarjeta
+            'CardHolderId': 'ID',  # Puedes ajustar esto según tus necesidades
+            'CardNumber': card_number,
+            'CVC': cvv,
+            'ExpirationDate': expiration_date,
             # Agrega más campos según sea necesario
         }
 
-        # Resto de la lógica para la API de Instapago
+        # Realiza la solicitud a la API de Instapago
+        response = requests.post(settings.INSTAPAGO_API_URL, json=payload)
 
-        # Después de procesar el pago, puedes redirigir a una página de éxito
-        return render(request, 'payment_success.html')
+        if response.status_code == 200:
+            # El pago fue exitoso
+            user_cart.products.clear()  # Limpia el carrito después de una compra exitosa
+            return render(request, 'payment_success.html')
+        else:
+            # El pago falló, maneja el error de alguna manera (puedes redirigir a una página de error)
+            return HttpResponse("Error en el pago. Por favor, inténtalo de nuevo o contacta al soporte.")
     else:
-        # Maneja el caso de solicitud GET (si es necesario)
-        return HttpResponse("Método no permitido")
+        # Si la solicitud no es un POST, redirige al carrito o a donde desees
+        return redirect('cart')
 
 def product_detail(request, product_id):
     product = get_object_or_404(Product, id=product_id)
